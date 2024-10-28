@@ -2,7 +2,7 @@
 
 # Configuration
 PROXMOX_API_URL="https://<your-proxmox-server-ip>:8006/api2/json/cluster/tasks"
-PROXMOX_API_KEY="PVEAPIToken=<your-username>!<your-token-name>=<your-api-key>"
+PROXMOX_API_KEY="PVEAPIToken=<your-username>@<realm>!<your-token-name>=<your-api-key>"
 DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/<your-webhook-url>"  # Replace with your Discord webhook URL
 CHECK_INTERVAL=10  # Check every 10 seconds
 SENT_TASKS_FILE="/tmp/sent_tasks.txt"
