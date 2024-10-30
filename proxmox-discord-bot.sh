@@ -6,6 +6,8 @@ PROXMOX_API_KEY="PVEAPIToken=<your-username>@<realm>!<your-token-name>=<your-api
 DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/<your-webhook-url>"  # Replace with your Discord webhook URL
 CHECK_INTERVAL=10  # Check every 10 seconds
 SENT_TASKS_FILE="/tmp/sent_tasks.txt"
+IGNORE_RUNNING_TASKS=true  # set to false if you wish to receive notifications of tasks that are still running
+IGNORE_OK_STATUS=true  # set to false to include tasks that complete successfully, i.e. with a Status of 'OK'
 
 # Function to send notification to Discord
 send_discord_notification() {
@@ -101,6 +103,20 @@ while true; do
         echo "$(date): Start Time: $task_start_time"
         echo "$(date): End Time: $task_end_time"
         echo "$(date): Node: $task_node"
+
+        # Check if 'Running' tasks should be ignored and if current task qualifies
+        if [ $IGNORE_RUNNING_TASKS ] && [ $task_end_time == 'Running' ]; then
+            echo "$(date): Running Tasks are set to be ignored. Skipping..."
+            mark_task_as_sent "$task_id"
+            continue
+        fi
+
+        # Check if OK Statuses should be ignored and if current task qualifies
+        if [ $IGNORE_OK_STATUS ] && [ $task_status == 'OK' ]; then
+            echo "$(date): Tasks with a Status of 'OK' are set to be ignored. Skipping..."
+            mark_task_as_sent "$task_id"
+            continue
+        fi
 
         # Check if task has already been sent
         if task_already_sent "$task_id"; then
