@@ -105,14 +105,14 @@ while true; do
         echo "$(date): Node: $task_node"
 
         # Check if 'Running' tasks should be ignored and if current task qualifies
-        if [ $IGNORE_RUNNING_TASKS ] && [ $task_end_time == 'Running' ]; then
+        if [ $IGNORE_RUNNING_TASKS ] && [ "$task_end_time" == "null" ]; then
             echo "$(date): Running Tasks are set to be ignored. Skipping..."
             mark_task_as_sent "$task_id"
             continue
         fi
 
         # Check if OK Statuses should be ignored and if current task qualifies
-        if [ $IGNORE_OK_STATUS ] && [ $task_status == 'OK' ]; then
+        if [ $IGNORE_OK_STATUS ] && [ "$task_status" == "OK" ]; then
             echo "$(date): Tasks with a Status of 'OK' are set to be ignored. Skipping..."
             mark_task_as_sent "$task_id"
             continue
